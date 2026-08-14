@@ -1,0 +1,77 @@
+# Maintainer: William C. Canin
+pkgname=argvus-waybar
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Waybar with immutable click coordinates for Argvus shell popups"
+arch=('x86_64')
+url='https://github.com/Alexays/Waybar'
+license=('MIT')
+
+_commit=d44a27af1023b5c68f6f61435ba550bf03f69938
+_srcdir="Waybar-${_commit}"
+
+depends=(
+  'fmt'
+  'gtk-layer-shell'
+  'gtkmm3'
+  'jack'
+  'jsoncpp'
+  'libdbusmenu-gtk3'
+  'libevdev'
+  'libinput'
+  'libmm-glib'
+  'libmpdclient'
+  'libnl'
+  'libpulse'
+  'libsigc++'
+  'libwireplumber'
+  'libxkbcommon'
+  'playerctl'
+  'sndio'
+  'spdlog'
+  'upower'
+  'wayland'
+)
+makedepends=(
+  'cmake'
+  'glib2-devel'
+  'meson'
+  'python-setuptools'
+  'scdoc'
+  'wayland-protocols'
+)
+optdepends=(
+  'otf-font-awesome: icons in the default configuration'
+)
+provides=("waybar=${pkgver%%.argvus*}")
+conflicts=('waybar' 'waybar-git')
+backup=(
+  'etc/xdg/waybar/config.jsonc'
+  'etc/xdg/waybar/style.css'
+)
+source=(
+  "waybar-${_commit}.tar.gz::https://github.com/Alexays/Waybar/archive/${_commit}.tar.gz"
+  'immutable-click-coordinates.patch'
+)
+sha256sums=('SKIP' 'SKIP')
+
+prepare() {
+  cd "${srcdir}/${_srcdir}"
+  patch -Np1 -i "${srcdir}/immutable-click-coordinates.patch"
+}
+
+build() {
+  arch-meson \
+    -Dexperimental=true \
+    -Dcava=disabled \
+    -Dgps=disabled \
+    -Dtests=disabled \
+    "${srcdir}/${_srcdir}" build
+  meson compile -C build
+}
+
+package() {
+  meson install -C build --destdir "${pkgdir}"
+  install -Dm644 "${startdir}/../../LICENSE" \
+    "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

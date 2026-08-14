@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate package metadata
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install packaging tools
+        run: |
+          pacman -Syu --noconfirm --needed \
+            base-devel \
+            git \
+            sudo
+
+      - name: Validate repository files
+        run: make validate
+
+      - name: Validate source and patch
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          useradd --create-home --shell /bin/bash builder
+          chown -R builder:builder "$GITHUB_WORKSPACE"
+          sudo -u builder env GITHUB_WORKSPACE="$GITHUB_WORKSPACE" bash -lc \
+            'cd "$GITHUB_WORKSPACE/packaging/arch" && makepkg --nobuild --nodeps --skipchecksums --skippgpcheck'

@@ -1,0 +1,27 @@
+--- a/src/AModule.cpp
++++ b/src/AModule.cpp
+@@ -236,19 +236,14 @@
+       format = config_[format].asString();
+   }
+   if (!format.empty()) {
+-    const int width = gdk_window_get_width(e->window);
+-    const int height = gdk_window_get_height(e->window);
+-    // Substitute {x}/{y} with the click position. The configured command is
+-    // arbitrary user input that may contain literal braces which are not {x}/{y}
+-    // (e.g. `echo ${HOME}`, `awk '{print $1}'`, brace expansions). Those make
+-    // libfmt throw fmt::format_error; since we run inside a GTK signal handler an
+-    // uncaught exception aborts the whole bar. Only format when a placeholder is
+-    // actually present, and fall back to the raw command if formatting throws.
++    // Substitute {x}/{y} with immutable root-window click coordinates. Argvus
++    // shell popups use these values as an anchor, so they must not change when
++    // the clicked widget changes size or content after the event is delivered.
+     std::string cmd = format;
+     if (format.find("{x}") != std::string::npos || format.find("{y}") != std::string::npos) {
+       try {
+-        cmd = fmt::format(fmt::runtime(format), fmt::arg("x", (int)round(100. * e->x / width)),
+-                          fmt::arg("y", (int)round(100. * e->y / height)));
++        cmd = fmt::format(fmt::runtime(format), fmt::arg("x", (int)round(e->x_root)),
++                          fmt::arg("y", (int)round(e->y_root)));
+       } catch (const fmt::format_error& err) {
+         spdlog::warn("Failed to format command '{}': {}. Running it unformatted.", format,
+                      err.what());
