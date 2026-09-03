@@ -3,7 +3,7 @@ DESTDIR ?=
 
 .DEFAULT_GOAL := help
 
-.PHONY: help validate validate-pkgbuild release-archive
+.PHONY: help validate validate-pkgbuild release-archive build clean
 
 help:
 	@echo "Available targets:"
@@ -32,3 +32,6 @@ release-archive:
 
 build:
 	@tools/build-local-package.sh
+
+clean:
+	rm -f packaging/arch/*.zst packaging/arch/*.tar.gz
