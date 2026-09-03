@@ -7,6 +7,7 @@ DESTDIR ?=
 
 help:
 	@echo "Available targets:"
+	@echo "  make build"
 	@echo "  make validate"
 	@echo "  make validate-pkgbuild"
 	@echo "  make release-archive"
@@ -26,3 +27,8 @@ release-archive:
 	mkdir -p .release
 	git archive --format=tar.gz --prefix="argvus-waybar-$$(git rev-parse --short HEAD)/" \
 		--output=".release/argvus-waybar-$$(git rev-parse --short HEAD).tar.gz" HEAD
+
+.PHONY: build
+
+build:
+	@tools/build-local-package.sh
