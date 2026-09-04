@@ -3,3 +3,5 @@
 *.zst
 waybar*.tar.gz
 argvus*.tar.gz
+
+/dist/
