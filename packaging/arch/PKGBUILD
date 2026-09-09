@@ -41,7 +41,7 @@ makedepends=(
   'wayland-protocols'
 )
 optdepends=(
-  'otf-font-awesome: icons in the default configuration'
+  'argvus-fonts: icons in the ARGVUS Waybar configurations'
 )
 provides=("waybar=${pkgver%%.argvus*}")
 conflicts=('waybar' 'waybar-git')
