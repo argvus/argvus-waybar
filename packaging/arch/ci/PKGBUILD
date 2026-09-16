@@ -4,7 +4,7 @@ pkgver=0.2.0
 pkgrel=1
 pkgdesc="Waybar with immutable click coordinates for Argvus shell popups"
 arch=('x86_64')
-url='https://github.com/Alexays/Waybar'
+url='https://github.com/argvus/argvus-waybar'
 license=('MIT')
 
 _commit=6d60c8e02be67bb85bb9b1ea803f2fbcf0722002
@@ -50,28 +50,23 @@ backup=(
   'etc/xdg/waybar/style.css'
 )
 source=(
-  "waybar-${_commit}.tar.gz::https://github.com/Alexays/Waybar/archive/${_commit}.tar.gz"
-  'immutable-click-coordinates.patch'
+  "${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz"
 )
-sha256sums=('SKIP' 'SKIP')
+sha256sums=()
+
+# shellcheck disable=SC1091
+_functions_file="${startdir:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)}/../common/functions.sh"
+. "$_functions_file"
 
 prepare() {
-  cd "${srcdir}/${_srcdir}"
-  patch -Np1 -i "${srcdir}/immutable-click-coordinates.patch"
+  arch_normalize_source_tree
+  arch_prepare_waybar_source
 }
 
 build() {
-  arch-meson \
-    -Dexperimental=true \
-    -Dcava=disabled \
-    -Dgps=disabled \
-    -Dtests=disabled \
-    "${srcdir}/${_srcdir}" build
-  meson compile -C build
+  arch_build_waybar
 }
 
 package() {
-  meson install -C build --destdir "${pkgdir}"
-  install -Dm644 "${startdir}/../../LICENSE" \
-    "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  arch_package_waybar
 }

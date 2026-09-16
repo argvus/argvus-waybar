@@ -1,73 +1,32 @@
 # Development
 
-Argvus Waybar packages Waybar for the Argvus desktop with the
-`immutable-click-coordinates.patch` modification.
+This repository packages the upstream Waybar project for the ARGVUS desktop.
+The package applies immutable-click-coordinates.patch before building it with Meson.
 
-The upstream project is Alexays/Waybar:
+## Project layout
 
-```text
-https://github.com/Alexays/Waybar
-```
+packaging/arch/ contains ci/PKGBUILD for tagged releases, local/PKGBUILD for
+working-tree builds, common/functions.sh for shared behavior, the pinned
+upstream Waybar archive, and the ARGVUS patch. tools/sh contains the local
+builder and validation scripts. build/ contains ignored local artifacts.
 
-## Requirements
+## Checks
 
-Local package validation requires Arch Linux tooling:
+On Arch Linux:
 
-```sh
-sudo pacman -S --needed base-devel git
-```
+    make validate
+    make lint
+    make build
 
-The Arch package recipe lives at `packaging/arch/PKGBUILD`.
+make build creates the package in build/dist/. Both PKGBUILDs extract the
+pinned upstream archive, apply the patch, build with Meson, and install Waybar.
 
-## Commands
+## Package contents
 
-Validate the repository metadata and PKGBUILD syntax:
+    /usr/bin/waybar
+    /etc/xdg/waybar/config.jsonc
+    /etc/xdg/waybar/style.css
+    /usr/share/licenses/argvus-waybar/LICENSE
 
-```sh
-make validate
-```
-
-Validate that the upstream source downloads and the Argvus patch applies:
-
-```sh
-cd packaging/arch
-makepkg --nobuild --nodeps --skipchecksums --skippgpcheck
-```
-
-Build the package locally:
-
-```sh
-cd packaging/arch
-makepkg --syncdeps --noconfirm --needed --cleanbuild --clean
-```
-
-## Patch
-
-`packaging/arch/immutable-click-coordinates.patch` changes Waybar click command
-placeholder substitution so `{x}` and `{y}` use the root-window click position
-reported by GTK instead of percentages relative to the clicked widget. Argvus
-uses these stable coordinates to anchor shell popups.
-
-## Package Contents
-
-The Arch package installs Waybar's Meson output, including:
-
-```text
-/usr/bin/waybar
-/etc/xdg/waybar/config.jsonc
-/etc/xdg/waybar/style.css
-/usr/share/licenses/argvus-waybar/LICENSE
-```
-
-The package is architecture-specific, so `makepkg` produces a file named
-`argvus-waybar-X.Y.Z-1-x86_64.pkg.tar.zst`.
-
-## Release Flow
-
-1. Tag `vX.Y.Z` and push the tag.
-2. Confirm the package workflow builds `argvus-waybar-X.Y.Z-1-x86_64.pkg.tar.zst` and its `.sig`.
-3. Confirm the workflow publishes both files to `argvus/packages` under `public/arch/x86_64/` and updates the Arch repository database.
-
-The project does not create GitHub Releases for package distribution. The built
-`.pkg.tar.zst` and `.sig` are kept as GitHub Actions artifacts for one day only;
-the permanent package copies live in `argvus/packages`.
+The pinned upstream source is Waybar commit
+6d60c8e02be67bb85bb9b1ea803f2fbcf0722002.
