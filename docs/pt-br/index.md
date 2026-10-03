@@ -116,4 +116,4 @@ systemctl --user status argvus-taskbar.service
 journalctl --user -u argvus-taskbar.service -n 50 --no-pager
 ```
 
-Veja [Taskbar](./taskbar/) para as funcionalidades voltadas ao usuário e [localizações de arquivos](../../reference/file-locations/) para os caminhos instalados e do usuário.
+Veja [Taskbar](/pt/docs/argvus-taskbar/taskbar/) para as funcionalidades voltadas ao usuário e [localizações de arquivos](/pt/docs/reference/file-locations/) para os caminhos instalados e do usuário.
