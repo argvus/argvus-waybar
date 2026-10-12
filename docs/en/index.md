@@ -46,7 +46,7 @@ The normal ARGVUS session uses the managed copies under:
 
 `argvus-config` recreates these files from the packaged defaults when applying a theme, then reapplies persistent ARGVUS state such as taskbar margins, the `right-2` utility-group mode, border radius and the font block. The same is true of `data/waybar/argvus-taskbar.{jsonc,css}` and `data/waybar/argvus-widget-telemetry.{jsonc,css}`: they are replaced from the packaged defaults on an appearance change, so manual edits there are lost too.
 
-Generated files under `~/.config/argvus/data/generated/waybar/` are derived state and should not be edited directly; the whole tree is rebuilt from `config.json` on the next `argvus-config apply`. Do not use `argvus --setup --copy taskbar` as the taskbar customization path; the taskbar runner resolves its canonical `data/taskbar/` locations above.
+Generated files under `~/.config/argvus/data/generated/waybar/` are derived state and should not be edited directly; the whole tree is rebuilt from `config.json` on the next `argvus config apply`. Do not use `argvus --setup --copy taskbar` as the taskbar customization path; the taskbar runner resolves its canonical `data/taskbar/` locations above.
 
 ## Persistent JSONC customization
 
@@ -91,13 +91,13 @@ Native CSS and theme files become user-owned. Theme changes will not regenerate 
 Restart only the taskbar after changing its JSONC or CSS:
 
 ```sh
-argvus-sessionctl restart waybar
+argvus sessionctl restart waybar
 ```
 
 For a complete session/configuration refresh, use:
 
 ```sh
-argvus-sessionctl reload
+argvus sessionctl reload
 ```
 
 To see which files the running Waybar process actually uses:
