@@ -11,6 +11,7 @@ _commit=6d60c8e02be67bb85bb9b1ea803f2fbcf0722002
 _srcdir="Waybar-${_commit}"
 
 depends=(
+  'argvus'
   'fmt'
   'gtk-layer-shell'
   'gtkmm3'
