@@ -7,7 +7,7 @@ description: Customize the ARGVUS Waybar taskbar without editing packaged files.
 
 ## Configuration precedence
 
-For the taskbar and the telemetry surface, `argvus-sessionctl` resolves the configuration and stylesheet independently in this order:
+For the taskbar and the telemetry surface, `argvus sessionctl` resolves the configuration and stylesheet independently in this order:
 
 ```text
 ~/.config/argvus/data/generated/waybar/argvus-taskbar.{jsonc,css}

@@ -1,14 +1,13 @@
 ---
 title: Overrides da Waybar e da taskbar
 description: Personalize a taskbar Waybar do ARGVUS sem editar arquivos empacotados.
-slug: pt/0.4.0/docs/user-guide/desktop/waybar-overrides
 ---
 
 `argvus-taskbar` fornece a configuração JSONC/CSS da taskbar do ARGVUS e seus helpers. `argvus-waybar` fornece o binário Waybar, enquanto `argvus-session` inicia o serviço e seleciona os arquivos efetivos. Tanto a cópia gerenciada quanto a gerada são escritas pelo `argvus-config`: ele substitui a camada de tema e reaplica margens da taskbar, modo do grupo utilitário `right-2`, raio de borda e o bloco de fonte da telemetria quando temas ou estado de layout mudam. O `argvus-appearance` não escreve mais esses arquivos; ele apenas confirma a mudança e pede um reload.
 
 ## Precedência da configuração
 
-Para a taskbar e para a superfície de telemetria, `argvus-sessionctl` resolve a configuração e a folha de estilos independentemente nesta ordem:
+Para a taskbar e para a superfície de telemetria, `argvus sessionctl` resolve a configuração e a folha de estilos independentemente nesta ordem:
 
 ```text
 ~/.config/argvus/data/generated/waybar/argvus-taskbar.{jsonc,css}
