@@ -22,4 +22,4 @@ impact, and a suggested fix when possible.
 
 This project produces an Arch Linux package built from this repository.
 Security-sensitive behavior includes the pinned source archive and patch used
-by packaging/arch/ci/PKGBUILD.
+by packaging/arch/remote/PKGBUILD.
