@@ -27,10 +27,11 @@ arch_normalize_source_tree() {
 
 arch_prepare_waybar_source() {
   local source_root="${srcdir}/${pkgname}-${pkgver}"
-  local archive
-  archive="$(find "$source_root/packaging/arch" -maxdepth 1 -type f -name 'waybar-*.tar.gz' -print -quit)"
-  [[ -n "$archive" ]] || {
-    printf 'error: Waybar source archive not found\n' >&2
+  # The upstream archive is a noextract source, so makepkg leaves it as a file in srcdir.
+  # Extracting it here keeps the argvus source tree as the only directory makepkg created.
+  local archive="${srcdir}/waybar-${_commit}.tar.gz"
+  [[ -f "$archive" ]] || {
+    printf 'error: Waybar source archive not found: %s\n' "$archive" >&2
     return 1
   }
 

@@ -52,8 +52,10 @@ backup=(
 )
 source=(
   "${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz"
+  "waybar-${_commit}.tar.gz::https://github.com/Alexays/Waybar/archive/${_commit}.tar.gz"
 )
-sha256sums=()
+noextract=("waybar-${_commit}.tar.gz")
+sha256sums=('SKIP' '420c0750092f6ab07fe807e298243dc69ab8ea1224e2f2597a82bd65892d8320')
 
 # shellcheck disable=SC1091
 _functions_file="${startdir:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)}/../common/functions.sh"

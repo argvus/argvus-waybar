@@ -50,8 +50,13 @@ backup=(
   'etc/xdg/waybar/config.jsonc'
   'etc/xdg/waybar/style.css'
 )
-source=("${pkgname}-${pkgver}.tar.gz")
-sha256sums=()
+source=(
+  "${pkgname}-${pkgver}.tar.gz"
+  "waybar-${_commit}.tar.gz::https://github.com/Alexays/Waybar/archive/${_commit}.tar.gz"
+)
+noextract=("waybar-${_commit}.tar.gz")
+# The first checksum is replaced by pkgbuild_local.sh with the local archive hash.
+sha256sums=('SKIP' '420c0750092f6ab07fe807e298243dc69ab8ea1224e2f2597a82bd65892d8320')
 
 # shellcheck disable=SC1091
 _functions_file="${startdir:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)}/../common/functions.sh"

@@ -5,10 +5,11 @@ The package applies immutable-click-coordinates.patch before building it with Me
 
 ## Project layout
 
-packaging/arch/ contains ci/PKGBUILD for tagged releases, local/PKGBUILD for
-working-tree builds, common/functions.sh for shared behavior, the pinned
-upstream Waybar archive, and the ARGVUS patch. tools/sh contains the local
-builder and validation scripts. build/ contains ignored local artifacts.
+packaging/arch/ contains remote/PKGBUILD for tagged releases, local/PKGBUILD for
+working-tree builds, common/functions.sh for shared behavior, and the ARGVUS
+patch. makepkg downloads the pinned upstream Waybar archive as a noextract
+source. tools/sh contains the local builder and validation scripts. build/
+contains ignored local artifacts.
 
 ## Checks
 
@@ -29,4 +30,5 @@ pinned upstream archive, apply the patch, build with Meson, and install Waybar.
     /usr/share/licenses/argvus-waybar/LICENSE
 
 The pinned upstream source is Waybar commit
-6d60c8e02be67bb85bb9b1ea803f2fbcf0722002.
+6d60c8e02be67bb85bb9b1ea803f2fbcf0722002, with the archive checksum
+420c0750092f6ab07fe807e298243dc69ab8ea1224e2f2597a82bd65892d8320.
