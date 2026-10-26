@@ -75,13 +75,13 @@ The example illustrates the Waybar structure; keep the rest of the packaged conf
 
 ## Persistent CSS customization
 
-The packaged stylesheet imports theme files with relative paths. If you override the CSS, copy the theme directory as well or replace the imports with paths that exist in your configuration:
+The packaged stylesheet imports its colours from the active theme build. If you override the CSS, point the theme import at the build, whose path stays the same across theme switches:
 
 ```sh
-mkdir -p ~/.config/waybar/themes
 cp /usr/share/argvus/taskbar/config/argvus-taskbar.css \
   ~/.config/waybar/argvus-taskbar.css
-cp -a /usr/share/argvus/taskbar/config/themes/. ~/.config/waybar/themes/
+sed -i '1s|.*|@import url("'"$HOME"'/.config/argvus/data/generated/theme/current/taskbar/theme.css");|' \
+  ~/.config/waybar/argvus-taskbar.css
 ```
 
 Native CSS and theme files become user-owned. Theme changes will not regenerate them automatically; update them deliberately when ARGVUS adds or changes theme assets.

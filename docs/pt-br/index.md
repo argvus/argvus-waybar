@@ -75,13 +75,13 @@ O exemplo mostra a estrutura da Waybar; mantenha o restante da configuração em
 
 ## Personalização persistente do CSS
 
-A folha de estilos empacotada importa temas usando caminhos relativos. Se você substituir o CSS, copie também o diretório de temas ou troque os imports por caminhos existentes na sua configuração:
+A folha de estilos empacotada importa as cores do build do tema ativo. Se você substituir o CSS, aponte o import do tema para o build, cujo caminho não muda entre trocas de tema:
 
 ```sh
-mkdir -p ~/.config/waybar/themes
 cp /usr/share/argvus/taskbar/config/argvus-taskbar.css \
   ~/.config/waybar/argvus-taskbar.css
-cp -a /usr/share/argvus/taskbar/config/themes/. ~/.config/waybar/themes/
+sed -i '1s|.*|@import url("'"$HOME"'/.config/argvus/data/generated/theme/current/taskbar/theme.css");|' \
+  ~/.config/waybar/argvus-taskbar.css
 ```
 
 CSS e temas nativos passam a pertencer ao usuário. As mudanças de tema não os regeneram automaticamente; atualize-os conscientemente quando o ARGVUS adicionar ou alterar assets de tema.
