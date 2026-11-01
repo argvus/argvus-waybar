@@ -1,6 +1,6 @@
 # Maintainer: William C. Canin
 pkgname=argvus-waybar
-pkgver=0.2.0
+pkgver=0.0.0
 pkgrel=1
 pkgdesc="Waybar with immutable click coordinates for Argvus shell popups"
 arch=('x86_64')
