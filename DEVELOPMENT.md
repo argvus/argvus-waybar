@@ -21,6 +21,12 @@ On Arch Linux:
 
 make build creates the package in build/dist/. Both PKGBUILDs extract the
 pinned upstream archive, apply the patch, build with Meson, and install Waybar.
+Before a local build, the helper checks the declared `makedepends` with
+`pacman -T`. It then runs `makepkg --nodeps`, so runtime dependencies need not
+be installed to create the package. Build dependencies must already be
+installed; the helper does not install them. `make install` uses pacman to
+install the package and resolve runtime dependencies from configured
+repositories.
 
 ## Package contents
 

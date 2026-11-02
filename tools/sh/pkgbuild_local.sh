@@ -9,7 +9,7 @@ DIST_DIR="$BUILD_DIR/dist"
 PKGBUILD_DIR="$ROOT_DIR/packaging/arch/local"
 PKGBUILD="$PKGBUILD_DIR/PKGBUILD"
 
-for command_name in makepkg sha256sum tar awk find; do
+for command_name in makepkg pacman sha256sum tar awk find; do
   command -v "$command_name" >/dev/null 2>&1 || {
     printf 'error: required command not found: %s\n' "$command_name" >&2
     exit 1
@@ -17,6 +17,21 @@ for command_name in makepkg sha256sum tar awk find; do
 done
 
 read -r pkgname pkgver <<<"$(bash -c 'source "$1"; printf "%s %s" "$pkgname" "$pkgver"' bash "$PKGBUILD")"
+build_dependencies="$(bash -c 'source "$1"; printf "%s\n" "${makedepends[@]}"' bash "$PKGBUILD")"
+if [[ -n "$build_dependencies" ]]; then
+  mapfile -t build_dependencies <<< "$build_dependencies"
+  if missing_dependencies="$(pacman -T "${build_dependencies[@]}")"; then
+    :
+  else
+    pacman_status=$?
+    if (( pacman_status == 127 )); then
+      printf 'error: missing build dependencies for %s:\n%s\n' "$pkgname" "$missing_dependencies" >&2
+    else
+      printf 'error: pacman could not check build dependencies for %s (exit %s)\n' "$pkgname" "$pacman_status" >&2
+    fi
+    exit 1
+  fi
+fi
 mkdir -p "$ARTIFACTS_DIR" "$DIST_DIR"
 archive="$ARTIFACTS_DIR/${pkgname}-${pkgver}.tar.gz"
 
@@ -48,8 +63,6 @@ find "$DIST_DIR" -maxdepth 1 -type f -name "${pkgname}-${pkgver}-*.pkg.tar.zst" 
 if [[ -n "${MAKEPKG_FLAGS:-}" ]]; then
   # shellcheck disable=SC2206
   flags=(${MAKEPKG_FLAGS})
-elif [[ "$pkgname" == "argvus-waybar" ]]; then
-  flags=(--syncdeps --noconfirm --needed --cleanbuild --force --check)
 else
   flags=(--nodeps --noconfirm --needed --cleanbuild --force --check)
 fi
