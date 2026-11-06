@@ -1,13 +1,15 @@
 # Development
 
 This repository packages the upstream Waybar project for the ARGVUS desktop.
-The package applies immutable-click-coordinates.patch before building it with Meson.
+The package applies immutable-click-coordinates.patch and project-workspaces.patch
+before building it with Meson. The latter adapts Hyprland 0.57 textual workspace
+addresses and supports optional runtime labels/tooltips for project workspaces.
 
 ## Project layout
 
 packaging/arch/ contains remote/PKGBUILD for tagged releases, local/PKGBUILD for
 working-tree builds, common/functions.sh for shared behavior, and the ARGVUS
-patch. makepkg downloads the pinned upstream Waybar archive as a noextract
+patches. makepkg downloads the pinned upstream Waybar archive as a noextract
 source. tools/sh contains the local builder and validation scripts. build/
 contains ignored local artifacts.
 
@@ -20,7 +22,7 @@ On Arch Linux:
     make build
 
 make build creates the package in build/dist/. Both PKGBUILDs extract the
-pinned upstream archive, apply the patch, build with Meson, and install Waybar.
+pinned upstream archive, apply both patches, build with Meson, and install Waybar.
 Before a local build, the helper checks the declared `makedepends` with
 `pacman -T`. It then runs `makepkg --nodeps`, so runtime dependencies need not
 be installed to create the package. Build dependencies must already be

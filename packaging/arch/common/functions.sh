@@ -37,6 +37,7 @@ arch_prepare_waybar_source() {
 
   tar -xzf "$archive" -C "$srcdir"
   patch -Np1 -d "${srcdir}/${_srcdir}" < "$source_root/packaging/arch/immutable-click-coordinates.patch"
+  patch -Np1 -d "${srcdir}/${_srcdir}" < "$source_root/packaging/arch/project-workspaces.patch"
 }
 
 arch_build_waybar() {

@@ -1,7 +1,8 @@
 # argvus-waybar
 
 Waybar packaged for the ARGVUS desktop with immutable click coordinates for
-shell popups.
+shell popups, Hyprland 0.57 named-workspace compatibility, and optional workspace
+labels/tooltips derived from ARGVUS project metadata.
 
 [![CI](https://github.com/argvus/argvus-waybar/actions/workflows/ci.yml/badge.svg)](https://github.com/argvus/argvus-waybar/actions/workflows/ci.yml)
 [![Release](https://github.com/argvus/argvus-waybar/actions/workflows/release.yml/badge.svg)](https://github.com/argvus/argvus-waybar/actions/workflows/release.yml)

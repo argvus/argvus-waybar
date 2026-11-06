@@ -9,5 +9,5 @@ PKGBUILDs with different source inputs:
 | remote/PKGBUILD | tagged release | tagged argvus-waybar repository archive |
 
 Both recipes extract the pinned upstream Waybar archive, apply the
-immutable-click-coordinates.patch, build with Meson, and install the same
+immutable-click-coordinates.patch and project-workspaces.patch, build with Meson, and install the same
 package contents. Shared behavior lives in common/functions.sh.

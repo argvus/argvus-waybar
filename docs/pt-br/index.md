@@ -116,3 +116,9 @@ journalctl --user -u argvus-taskbar.service -n 50 --no-pager
 ```
 
 Veja [Taskbar](/pt/docs/argvus-taskbar/taskbar/) para as funcionalidades voltadas ao usuário e [localizações de arquivos](/pt/docs/reference/file-locations/) para os caminhos instalados e do usuário.
+
+## Compatibilidade de workspaces do Hyprland
+
+A versão ARGVUS aceita tanto IDs numéricos antigos como endereços textuais de workspaces do Hyprland 0.57. Workspaces nomeados sem `id` recebem identificadores internos locais ao processo, consistentes entre snapshots, clientes, monitores e eventos. Esses identificadores nunca são enviados ao Hyprland: os botões usam o nome real.
+
+`hyprland/workspaces.workspace-metadata` pode indicar um arquivo JSON relativo a `$XDG_RUNTIME_DIR`, como `argvus/project-workspaces.json`. Cada nome de workspace aponta para um objeto com strings `label` e `tooltip`. Os rótulos são escapados como texto Pango e não alteram a identificação nem o destino do clique. Sem metadados, o nome nativo é usado. `argvus projects` gera os metadados de projetos; reabra um projeto após alterar a lista ou o idioma para atualizar os rótulos.

@@ -1,0 +1,187 @@
+--- a/include/modules/hyprland/backend.hpp
++++ b/include/modules/hyprland/backend.hpp
+@@ -31,6 +31,10 @@
+ 
+   void registerForIPC(const std::string& ev, EventHandler* ev_handler);
+   void unregisterForIPC(EventHandler* handler);
++
++  // Translate textual 0.57 workspace addresses into internal IDs for older modules.
++  static int workspaceId(const std::string& address);
++  static void normalizeWorkspaceIds(Json::Value& value);
+ 
+   static std::string getSocket1Reply(const std::string& rq);
+   Json::Value getSocket1JsonReply(const std::string& rq);
+--- a/include/modules/hyprland/workspaces.hpp
++++ b/include/modules/hyprland/workspaces.hpp
+@@ -49,6 +49,9 @@
+   auto barScroll() const -> bool { return m_barScroll; }
+ 
+   auto getBarOutput() const -> std::string { return m_bar.output->name; }
++  auto workspaceMetadata() const -> std::string {
++    return config_["workspace-metadata"].isString() ? config_["workspace-metadata"].asString() : "";
++  }
+   auto formatBefore() const -> std::string { return m_formatBefore; }
+   auto formatAfter() const -> std::string { return m_formatAfter; }
+   auto taskbarFormatBefore() const -> std::string { return m_taskbarFormatBefore; }
+--- a/src/modules/hyprland/backend.cpp
++++ b/src/modules/hyprland/backend.cpp
+@@ -10,6 +10,8 @@
+ #include <unistd.h>
+ 
+ #include <array>
++#include <charconv>
++#include <map>
+ #include <cerrno>
+ #include <cstring>
+ #include <filesystem>
+@@ -291,7 +293,35 @@
+     return {};
+   }
+ 
+-  return parser_.parse(reply);
++  auto value = parser_.parse(reply);
++  normalizeWorkspaceIds(value);
++  return value;
++}
++
++int IPC::workspaceId(const std::string& address) {
++  if (address.starts_with("name:")) return workspaceId(address.substr(5));
++  int numericId = 0;
++  const auto [end, error] = std::from_chars(address.data(), address.data() + address.size(), numericId);
++  if (error == std::errc{} && end == address.data() + address.size()) return numericId;
++  if (address == "special") return -99;
++  // These are process-local identities only, never dispatched back to Hyprland.
++  static std::mutex mutex;
++  static std::map<std::string, int> addresses;
++  std::lock_guard lock(mutex);
++  auto entry = addresses.try_emplace(address, -1000000 - static_cast<int>(addresses.size())).first;
++  return entry->second;
++}
++
++void IPC::normalizeWorkspaceIds(Json::Value& value) {
++  if (value.isObject()) {
++    if (!value.isMember("id") && value["address"].isString() && value["name"].isString() &&
++        (value["type"] == "normal" || value["type"] == "special")) {
++      value["id"] = workspaceId(value["address"].asString());
++    }
++    for (auto& child : value) normalizeWorkspaceIds(child);
++  } else if (value.isArray()) {
++    for (auto& child : value) normalizeWorkspaceIds(child);
++  }
+ }
+ 
+ bool IPC::isLuaConfigProvider(const std::string& systemInfo) {
+--- a/src/modules/hyprland/workspace.cpp
++++ b/src/modules/hyprland/workspace.cpp
+@@ -1,4 +1,8 @@
+ #include <glibmm/main.h>
++#include <glibmm/markup.h>
++#include <fstream>
++#include <filesystem>
++#include <json/reader.h>
+ #include <json/value.h>
+ #include <spdlog/spdlog.h>
+ 
+@@ -490,15 +494,34 @@
+     }
+   }
+ 
++  m_button.set_tooltip_text("");
+   if (!workspace_tooltip.empty()) {
+     m_button.set_tooltip_text(
+         fmt::format(fmt::runtime(workspace_tooltip), fmt::arg("id", id()), fmt::arg("name", name()),
+                     fmt::arg("icon", workspace_icon), fmt::arg("windows", windows)));
+   }
+ 
++  std::string displayName = name();
++  const auto metadataPath = m_workspaceManager.workspaceMetadata();
++  if (!metadataPath.empty()) {
++    const auto relative = std::filesystem::path(metadataPath);
++    if (!relative.is_absolute() && metadataPath.find("..") == std::string::npos) {
++      std::ifstream stream(std::filesystem::path(g_get_user_runtime_dir()) / relative);
++      Json::Value metadata;
++      Json::CharReaderBuilder builder;
++      std::string errors;
++      if (stream && Json::parseFromStream(builder, stream, &metadata, &errors) && metadata.isObject()) {
++        const auto& entry = metadata[name()];
++        if (entry.isObject() && entry["label"].isString()) displayName = entry["label"].asString();
++        if (entry.isObject() && entry["tooltip"].isString()) m_button.set_tooltip_text(entry["tooltip"].asString());
++      }
++    }
++  }
++  const auto escapedDisplayName = Glib::Markup::escape_text(displayName);
++
+   auto formatBefore = m_workspaceManager.formatBefore();
+   m_labelBefore.set_markup(fmt::format(fmt::runtime(formatBefore), fmt::arg("id", id()),
+-                                       fmt::arg("name", name()), fmt::arg("icon", workspace_icon),
++                                       fmt::arg("name", escapedDisplayName.raw()), fmt::arg("icon", workspace_icon),
+                                        fmt::arg("windows", windows)));
+   m_labelBefore.get_style_context()->add_class("workspace-label");
+ 
+@@ -623,7 +646,7 @@
+ 
+   if (has_format_after) {
+     m_labelAfter.set_markup(fmt::format(fmt::runtime(formatAfter), fmt::arg("id", id()),
+-                                        fmt::arg("name", name()),
++                                        fmt::arg("name", Glib::Markup::escape_text(name()).raw()),
+                                         fmt::arg("icon", workspace_icon)));
+     m_content.pack_end(m_labelAfter, false, false);
+     m_labelAfter.show();
+--- a/src/modules/hyprland/workspaces.cpp
++++ b/src/modules/hyprland/workspaces.cpp
+@@ -1217,12 +1217,8 @@
+ }
+ 
+ std::optional<int> Workspaces::parseWorkspaceId(std::string const& workspaceIdStr) {
+-  try {
+-    return workspaceIdStr == "special" ? -99 : std::stoi(workspaceIdStr);
+-  } catch (std::exception const& e) {
+-    spdlog::debug("Workspace \"{}\" is not bound to an id: {}", workspaceIdStr, e.what());
+-    return std::nullopt;
+-  }
++  if (workspaceIdStr.empty()) return std::nullopt;
++  return IPC::workspaceId(workspaceIdStr);
+ }
+ 
+ bool Workspaces::handleScroll(GdkEventScroll* e) {
+--- a/test/hyprland/backend.cpp
++++ b/test/hyprland/backend.cpp
+@@ -303,3 +303,38 @@
+   // Cleanup: reset detection so other tests aren't affected
+   IPCTestHelper::resetLuaProtocolDetection();
+ }
++
++TEST_CASE("TextualWorkspaceAddresses", "[workspace-address]") {
++  waybar::util::JsonParser parser;
++  auto reply = parser.parse(R"({
++    "workspaces": [
++      {"address":"2", "id":2, "type":"normal", "name":"2"},
++      {"address":"proj-app-abc", "type":"normal", "name":"proj-app-abc"},
++      {"address":"proj-app-def", "type":"normal", "name":"proj-app-def"}
++    ],
++    "activeWorkspace":{"address":"proj-app-abc", "type":"normal", "name":"proj-app-abc"},
++    "client":{"workspace":{"address":"proj-app-abc", "type":"normal", "name":"proj-app-abc"}},
++    "window":{"address":"0x123", "class":"kitty"}
++  })");
++  hyprland::IPC::normalizeWorkspaceIds(reply);
++  const auto& workspaces = reply["workspaces"];
++  REQUIRE(workspaces[0]["id"].asInt() == 2);
++  const auto namedId = workspaces[1]["id"].asInt();
++  REQUIRE(namedId < -1000);
++  REQUIRE(namedId != workspaces[2]["id"].asInt());
++  REQUIRE(reply["activeWorkspace"]["id"].asInt() == namedId);
++  REQUIRE(reply["client"]["workspace"]["id"].asInt() == namedId);
++  REQUIRE(hyprland::IPC::workspaceId("proj-app-abc") == namedId);
++  REQUIRE_FALSE(reply["window"].isMember("id"));
++  hyprland::IPC::normalizeWorkspaceIds(reply);
++  REQUIRE(reply["activeWorkspace"]["id"].asInt() == namedId);
++}
++
++TEST_CASE("WorkspaceAddressCompatibility", "[workspace-address]") {
++  REQUIRE(hyprland::IPC::workspaceId("3") == 3);
++  REQUIRE(hyprland::IPC::workspaceId("name:proj-name") == hyprland::IPC::workspaceId("proj-name"));
++  REQUIRE(hyprland::IPC::workspaceId("-99") == -99);
++  REQUIRE(hyprland::IPC::workspaceId("special") == -99);
++  REQUIRE(hyprland::IPC::workspaceId("3-project") != 3);
++  REQUIRE(hyprland::IPC::workspaceId("proj-name") != hyprland::IPC::workspaceId("special:proj-name"));
++}
