@@ -1,0 +1,30 @@
+--- a/src/factory.cpp
++++ b/src/factory.cpp
+@@ -34,6 +34,7 @@
+ #include "modules/hyprland/language.hpp"
+ #include "modules/hyprland/submap.hpp"
+ #include "modules/hyprland/window.hpp"
++#include "modules/hyprland/argvus_windows.hpp"
+ #include "modules/hyprland/windowcount.hpp"
+ #include "modules/hyprland/workspaces.hpp"
+ #endif
+@@ -216,6 +217,9 @@
+     }
+ #endif
+ #ifdef HAVE_HYPRLAND
++    if (ref == "hyprland/argvus-windows") {
++      return new waybar::modules::hyprland::ArgvusWindows(id, bar_, config_[name]);
++    }
+     if (ref == "hyprland/window") {
+       return new waybar::modules::hyprland::Window(id, bar_, config_[name]);
+     }
+--- a/meson.build
++++ b/meson.build
+@@ -343,6 +343,7 @@
+         'src/modules/hyprland/language.cpp',
+         'src/modules/hyprland/submap.cpp',
+         'src/modules/hyprland/window.cpp',
++        'src/modules/hyprland/argvus_windows.cpp',
+         'src/modules/hyprland/windowcount.cpp',
+         'src/modules/hyprland/workspace.cpp',
+         'src/modules/hyprland/workspaces.cpp',

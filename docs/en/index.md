@@ -122,3 +122,10 @@ See [Taskbar](/docs/argvus-taskbar/taskbar/) for the user-facing features and [f
 The ARGVUS build accepts both legacy numeric workspace IDs and Hyprland 0.57 textual workspace addresses. Named workspaces without an `id` receive process-local internal identifiers consistently across workspace snapshots, clients, monitors and events. These identifiers are never sent to Hyprland: workspace buttons dispatch the real name.
 
 `hyprland/workspaces.workspace-metadata` optionally names a JSON file relative to `$XDG_RUNTIME_DIR`, such as `argvus/project-workspaces.json`. Each workspace name maps to an object with `label` and `tooltip` strings. Labels are escaped as Pango text and do not change matching or click targets. Missing metadata falls back to native workspace names. `argvus projects` owns the derived project metadata; reopen a project after list/language changes to refresh it.
+
+
+## Window buttons and application bar
+
+A second Waybar appears on every monitor, on the edge opposite the main taskbar. It lists only the windows belonging to that monitor's current workspace, including minimized windows from that workspace. An open special workspace takes precedence. Pinned windows remain visible; hidden group tabs do not create extra entries, and a minimized group has one recovery entry. Tabs inside an application are not enumerated separately. Minimized entries retain their original monitor/workspace association. Click an entry to restore/activate it; its context menu offers restore, minimize, maximize/restore and close. Unknown application icons fall back to a window symbol.
+
+The `hyprland/argvus-windows` module consumes a JSON stream from `argvus windows watch --json`. GTK updates run on the main thread; actions use argument arrays and validated window addresses. Recovery readiness is confirmed against the compositor layer list.

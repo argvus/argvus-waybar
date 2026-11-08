@@ -38,6 +38,9 @@ arch_prepare_waybar_source() {
   tar -xzf "$archive" -C "$srcdir"
   patch -Np1 -d "${srcdir}/${_srcdir}" < "$source_root/packaging/arch/immutable-click-coordinates.patch"
   patch -Np1 -d "${srcdir}/${_srcdir}" < "$source_root/packaging/arch/project-workspaces.patch"
+  patch -Np1 -d "${srcdir}/${_srcdir}" < "$source_root/packaging/arch/window-list.patch"
+  install -Dm644 "$source_root/src/include/modules/hyprland/argvus_windows.hpp" "${srcdir}/${_srcdir}/include/modules/hyprland/argvus_windows.hpp"
+  install -Dm644 "$source_root/src/modules/hyprland/argvus_windows.cpp" "${srcdir}/${_srcdir}/src/modules/hyprland/argvus_windows.cpp"
 }
 
 arch_build_waybar() {

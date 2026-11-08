@@ -122,3 +122,10 @@ Veja [Taskbar](/pt/docs/argvus-taskbar/taskbar/) para as funcionalidades voltada
 A versão ARGVUS aceita tanto IDs numéricos antigos como endereços textuais de workspaces do Hyprland 0.57. Workspaces nomeados sem `id` recebem identificadores internos locais ao processo, consistentes entre snapshots, clientes, monitores e eventos. Esses identificadores nunca são enviados ao Hyprland: os botões usam o nome real.
 
 `hyprland/workspaces.workspace-metadata` pode indicar um arquivo JSON relativo a `$XDG_RUNTIME_DIR`, como `argvus/project-workspaces.json`. Cada nome de workspace aponta para um objeto com strings `label` e `tooltip`. Os rótulos são escapados como texto Pango e não alteram a identificação nem o destino do clique. Sem metadados, o nome nativo é usado. `argvus projects` gera os metadados de projetos; reabra um projeto após alterar a lista ou o idioma para atualizar os rótulos.
+
+
+## Botões de janela e barra de aplicativos
+
+Uma segunda Waybar aparece em cada monitor, na borda oposta à taskbar principal. Ela lista apenas as janelas do workspace atual daquele monitor, incluindo as minimizadas desse workspace. Um workspace especial aberto tem prioridade. Janelas fixadas permanecem visíveis; abas ocultas de grupos não criam entradas extras, e um grupo minimizado tem uma entrada de recuperação. Abas internas dos aplicativos não são enumeradas separadamente. As minimizadas mantêm a associação ao monitor e workspace originais. Clique em uma entrada para restaurar/ativar; o menu de contexto oferece restaurar, minimizar, maximizar/restaurar e fechar. Ícones de aplicativos desconhecidos usam um símbolo de janela.
+
+O módulo `hyprland/argvus-windows` consome um fluxo JSON de `argvus windows watch --json`. Atualizações GTK executam na thread principal; ações usam arrays de argumentos e endereços de janela validados. A prontidão da recuperação é confirmada na lista de superfícies do compositor.

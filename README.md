@@ -34,3 +34,5 @@ repository layout and release flow.
 ## License
 
 SPDX: MIT. See LICENSE.
+
+ARGVUS also adds `hyprland/argvus-windows`, the per-window recovery list used by the secondary Floating-mode bar. Its native module sources live in `src/`; the package applies the integration patch to the pinned upstream Waybar source.
