@@ -148,7 +148,7 @@ void ArgvusWindows::update() {
     if (window["minimized"].asBool())
       button->get_style_context()->add_class("minimized");
     button->signal_clicked().connect(
-        [this, address] { action("activate", address); });
+        [this, address] { action("toggle", address); });
     button->signal_button_press_event().connect(
         [this, address, labels](GdkEventButton *event) {
           if (event->button != 3)
