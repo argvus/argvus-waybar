@@ -1,6 +1,6 @@
 ---
 title:                                                ﺯﮉﯿﺋﺍﺭ ﺭﻭﻭﺍ ﺭﺎﺑ ﮏﺳﺎﭨ ﺭﻭﺍ ﺭﺎﺑ ﮮﻭ
-description: Customize the ARGVUS Waybar taskbar without editing packaged files.
+description: پیک فائلوں میں ترمیم کیے بغیر ARGVUS Waybar ٹاسک بار کو حسب ضرورت بنائیں۔
 ---
 
 `argvus-taskbar`ARGVUS ﺭﺎﺑ ﮏﺳﺎﭨ JSONC/CSS ۔ﮯﮨ ﺎﺗﺮﮐ ﻢﮨﺍﺮﻓ ﺲﭩﭘﺮﮑﺳﺍ ﻥﻭﺎﻌﻣ ﮯﮐ ﺱﺍ ﺭﻭﺍ ﻦﺸﯾﺮﮕﯿﻔﻨﮐ`argvus-waybar` provides the Waybar binary, while `argvus-session` starts the service and selects the effective files. The managed copy and the generated copy are both written by `argvus-config`: it replaces the theme layer and reapplies taskbar margins, `right-2` utility-group mode, border radius and the telemetry font block whenever themes or layout state change. `argvus-appearance` no longer writes these files; it only commits the change and asks for a reload.
@@ -84,7 +84,7 @@ sed -i '1s|.*|@import url("'"$HOME"'/.config/argvus/data/generated/theme/current
   ~/.config/waybar/argvus-taskbar.css
 ```
 
-۔ﮟﯾﺮﮐ ﭧﯾﮈ ﭖﺍ ﺮﭘ ﺭﻮﻃ ﯼﺭﻮﻌﺷ ﮟﯿﮩﻧﺍ ﻮﺗ ﮮﺮﮐ ﻞﯾﺪﺒﺗ ﺎﯾ ﮮﺮﮐ ﻞﻣﺎﺷ ﮯﺛﺎﺛﺍ ﻢﯿﮭﺗ ARGVUS ﺐﺟ 
+۔ﮟﯾﺮﮐ ﭧﯾﮈ ﭖﺍ ﺮﭘ ﺭﻮﻃ ﯼﺭﻮﻌﺷ ﮟﯿﮩﻧﺍ ﻮﺗ ﮮﺮﮐ ﻞﯾﺪﺒﺗ ﺎﯾ ﮮﺮﮐ ﻞﻣﺎﺷ ﮯﺛﺎﺛﺍ ﻢﯿﮭﺗ ARGVUS ﺐﺟ
 
 ##                                 ﮟﯾﺮﮐ ﮧﻨﺋﺎﻌﻣ ﺎﮐ ﻞﺋﺎﻓ ﺮﺛﺆﻣ ﺭﻭﺍ ﮟﯾﺮﮐ ﻮﮔﻻ﻿ ﮞﺎﯿﻠﯾﺪﺒﺗ
 
@@ -119,7 +119,7 @@ journalctl --user -u argvus-taskbar.service -n 50 --no-pager
 
 ## ﺖﻘﺑﺎﻄﻣ ﯽﮐ ﺲﯿﭙﺳﺍ ﮎﺭﻭ ﮉﻨﯿﻟﺮﭙﺋﺎﮨ
 
-The ARGVUS build accepts both legacy numeric workspace IDs and Hyprland 0.57 textual workspace addresses. Named workspaces without an  -s  `-c`  `-s` `id` receive process-local internal identifiers consistently across workspace snapshots, clients, monitors and events. These identifiers are never sent to Hyprland: workspace buttons dispatch the real name.
+ARGVUS بلڈ لیگیسی عددی ورک اسپیس IDs اور Hyprland 0.57 متنی ورک اسپیس ایڈریس دونوں کو قبول کرتی ہے۔ نام شدہ ورک اسپیسز بغیر -s `-c` `-s` `id` ورک اسپیس اسنیپ شاٹس، کلائنٹس، مانیٹرس اور ایونٹس میں مستقل طور پر پروسیس لوکل اندرونی شناخت کار حاصل کرتے ہیں۔ یہ شناخت کنندگان کبھی بھی Hyprland پر نہیں بھیجے جاتے: ورک اسپیس بٹن اصل نام بھیجتے ہیں۔
 
 `hyprland/workspaces.workspace-metadata` optionally names a JSON file relative to `$XDG_RUNTIME_DIR`, such as `argvus/project-workspaces.json`. Each workspace name maps to an object with `label` and `tooltip`۔ﮟﯿﮨ ﮯﺗﺎﺟ ﮯﯿﮐ ﻝﺎﻤﻌﺘﺳﺍ ﻡﺎﻧ ﮯﮐ ﺲﯿﭙﺳﺍ ﮎﺭﻭ ﯽﻣﺎﻘﻣ ﮯﯿﻟ ﮯﮐ ﺎﭩﯾﮈ ﺎﭩﯿﻣ ﺐﺋﺎﻏ ۔ﮯﺗﺮﮐ ﮟﯿﮩﻧ `argvus projects` owns the derived project metadata; reopen a project after list/language changes to refresh it.
 

@@ -3,15 +3,15 @@ title: Ghi đè Waybar và taskbar
 description: Tùy chỉnh thanh tác vụ ARGVUS Waybar mà không cần chỉnh sửa các tệp đã đóng gói.
 ---
 
- provides the ARGVUS taskbar JSONC/CSS configuration and its helper scripts. 
+ provides the ARGVUS taskbar JSONC/CSS configuration and its helper scripts.
 
- provides the Waybar binary, while 
+ provides the Waybar binary, while
 
- starts the service and selects the effective files. The managed copy and the generated copy are both written by 
+ khởi động dịch vụ và chọn các tập tin hiệu quả. Bản sao được quản lý và bản sao được tạo đều được viết bởi
 
-: it replaces the theme layer and reapplies taskbar margins, 
+: it replaces the theme layer and reapplies taskbar margins,
 
- utility-group mode, border radius and the telemetry font block whenever themes or layout state change. 
+ utility-group mode, border radius and the telemetry font block whenever themes or layout state change.
 
  no longer writes these files; it only commits the change and asks for a reload.
 
@@ -125,7 +125,7 @@ systemctl --user status argvus-taskbar.service
 journalctl --user -u argvus-taskbar.service -n 50 --no-pager
 ```
 
-See Taskbar for the user-facing features and file locations for the installed and user paths.
+Xem Thanh tác vụ để biết các tính năng hướng tới người dùng và vị trí tệp cho đường dẫn người dùng và cài đặt.
 
 ## Tương thích workspace Hyprland
 
@@ -134,14 +134,14 @@ Bản dựng ARGVUS chấp nhận cả ID workspace số kiểu cũ lẫn địa
 `hyprland/workspaces.workspace-metadata` tùy chọn đặt tên cho một tệp JSON liên quan đến `$XDG_RUNTIME_DIR`, chẳng hạn như `argvus/project-workspaces.json`. Mỗi tên không gian làm việc ánh xạ tới một đối tượng với chuỗi `label` và `tooltip`. Nhãn được thoát dưới dạng văn bản Pango và không thay đổi một khớp hoặc mục tiêu nhấp chuột. Siêu dữ liệu bị thiếu sẽ trở về tên không gian làm việc gốc. `argvus projects` argvus windows watch --json  `hyprland/argvus-windows` `argvus windows watch --json`   sở hữu siêu dữ liệu dự án được dẫn xuất; mở lại dự án sau khi thay đổi danh sách/ngôn ngữ để làm mới nó.
 
 
-## 
+##
 
 Một Waybar thứ hai xuất hiện trên mỗi màn hình, ở cạnh đối diện với thanh tác vụ chính. Nó chỉ liệt kê các cửa sổ thuộc không gian làm việc hiện tại của màn hình đó, bao gồm cả các cửa sổ đã thu nhỏ từ không gian làm việc đó. Một không gian làm việc đặc biệt đang mở sẽ được ưu tiên. Các cửa sổ ghim vẫn hiển thị; các tab nhóm bị ẩn sẽ không tạo mục bổ sung, và một nhóm thu nhỏ chỉ có một mục khôi phục. Các tab bên trong một ứng dụng không được liệt kê riêng. Các mục thu nhỏ vẫn giữ liên kết với màn hình/không gian làm việc gốc. Nhấp vào một cửa sổ không hoạt động để kích hoạt nó, cửa sổ đang hoạt động để thu nhỏ nó, hoặc cửa sổ đã thu nhỏ để khôi phục; menu ngữ cảnh của nó cung cấp các tùy chọn khôi phục, thu nhỏ, phóng to/khôi phục và đóng. Biểu tượng ứng dụng không xác định sẽ dùng ký hiệu cửa sổ thay thế.
 
-The 
+The
 
- module consumes a JSON stream from 
+ module consumes a JSON stream from
 
-. GTK updates run on the main thread; actions use argument arrays and validated window addresses. Recovery readiness is confirmed against the compositor layer list.
+. GTK các bản cập nhật chạy trên luồng chính; hành động sử dụng mảng đối số và địa chỉ cửa sổ được xác thực. Sự sẵn sàng phục hồi được xác nhận dựa trên danh sách lớp tổng hợp.
 
 Xem[Thanh tác vụ](/docs/argvus-taskbar/taskbar/)cho các tính năng hướng tới người dùng và[vị trí tệp](/docs/reference/file-locations/)cho các đường dẫn đã cài đặt và người dùng.

@@ -1,19 +1,19 @@
 ---
 title:                                                    ﻡﺎﻬﻤﻟﺍ ﻂﻳﺮﺷﻭ Waybar ﺕﺍﺯﻭﺎﺠﺗ
-description: Customize the ARGVUS Waybar taskbar without editing packaged files.
+description: قم بتخصيص شريط مهام ARGVUS Waybar دون تحرير الملفات المجمعة.
 ---
 
- provides the ARGVUS taskbar JSONC/CSS configuration and its helper scripts. 
+ يوفر تكوين شريط المهام ARGVUS JSONC/CSS والبرامج النصية المساعدة الخاصة به.
 
- provides the Waybar binary, while 
+ provides the Waybar binary, while
 
- starts the service and selects the effective files. The managed copy and the generated copy are both written by 
+يبدأ الخدمة ويختار الملفات الفعالة. تتم كتابة النسخة المُدارة والنسخة التي تم إنشاؤها بواسطة
 
-: it replaces the theme layer and reapplies taskbar margins, 
+: يستبدل طبقة السمة ويعيد تطبيق هوامش شريط المهام،
 
- utility-group mode, border radius and the telemetry font block whenever themes or layout state change. 
+ وضع مجموعة الأدوات المساعدة، ونصف قطر الحدود، وكتلة خط القياس عن بعد عندما تتغير السمات أو حالة التخطيط.
 
- no longer writes these files; it only commits the change and asks for a reload.
+ لم يعد يكتب هذه الملفات. إنه ينفذ التغيير فقط ويطلب إعادة التحميل.
 
 ##                                                                 ﺔﺌﻴﻬﺘﻟﺍ ﺔﻳﻮﻟﻭﺃ
 
@@ -54,7 +54,7 @@ description: Customize the ARGVUS Waybar taskbar without editing packaged files.
 ~/.config/argvus/data/taskbar/argvus-taskbar.css
 ```
 
-argvus-config recreates these files from the packaged defaults when applying a theme, then reapplies persistent ARGVUS state such as taskbar margins, the right-2 utility-group mode, border radius and the font block. The same is true of data/waybar/argvus-taskbar.{jsonc,css} and data/waybar/argvus-widget-telemetry.{jsonc,css}: they are replaced from the packaged defaults on an appearance change, so manual edits there are lost too.
+يقوم argvus-config بإعادة إنشاء هذه الملفات من الإعدادات الافتراضية المجمعة عند تطبيق سمة، ثم يعيد تطبيق حالة ARGVUS المستمرة مثل هوامش شريط المهام، ووضع مجموعة الأدوات المساعدة اليمنى-2، ونصف قطر الحدود وكتلة الخط. وينطبق الشيء نفسه على data/waybar/argvus-taskbar.{jsonc,css} وdata/waybar/argvus-widget-telemetry.{jsonc,css}: يتم استبدالهما من الإعدادات الافتراضية المجمعة عند تغيير المظهر، لذلك يتم فقدان التعديلات اليدوية هناك أيضًا.
 
 ## ﺮﻤﺘﺴﻣ JSONC ﺺﻴﺼﺨﺗ
 

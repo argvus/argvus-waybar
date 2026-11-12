@@ -104,7 +104,7 @@ pgrep -af 'waybar.*argvus-taskbar'
 systemctl --user status argvus-taskbar.service
 journalctl --user -u argvus-taskbar.service -n 50 --no-pager
 ```
-사용자용 기능은 [Taskbar](/docs/argvus-taskbar/taskbar/)]를, 설치 및 사용자 경로는 [file locations](/docs/reference/file-locations/)]를 참조하세요.
+사용자용 기능은 [Taskbar](/docs/argvus-taskbar/taskbar/)를, 설치 및 사용자 경로는 [file locations](/docs/reference/file-locations/)를 참조하세요.
 
 ## Hyprland 작업 공간 호환성
 

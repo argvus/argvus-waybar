@@ -3,17 +3,17 @@ title: वेबारी और टास्कबार ओवरराइड�
 description: पैकेज्ड फाइलों को संपादित किए बिना ARGVUS वेबार टास्कबार को कस्टमाइज़ करें।
 ---
 
- provides the ARGVUS taskbar JSONC/CSS configuration and its helper scripts. 
+ ARGVUS टास्कबार JSONC/CSS कॉन्फ़िगरेशन और इसकी सहायक स्क्रिप्ट प्रदान करता है।
 
- provides the Waybar binary, while 
+ provides the Waybar binary, while
 
- starts the service and selects the effective files. The managed copy and the generated copy are both written by 
+ सेवा प्रारंभ करता है और प्रभावी फ़ाइलों का चयन करता है। प्रबंधित प्रतिलिपि और जेनरेट की गई प्रतिलिपि दोनों द्वारा लिखी गई हैं
 
-: it replaces the theme layer and reapplies taskbar margins, 
+: यह थीम परत को बदल देता है और टास्कबार मार्जिन को फिर से लागू करता है,
 
- utility-group mode, border radius and the telemetry font block whenever themes or layout state change. 
+ उपयोगिता-समूह मोड, सीमा त्रिज्या और टेलीमेट्री फ़ॉन्ट ब्लॉक जब भी थीम या लेआउट स्थिति बदलती है।
 
- no longer writes these files; it only commits the change and asks for a reload.
+ अब ये फ़ाइलें नहीं लिखता; यह केवल परिवर्तन करता है और पुनः लोड करने के लिए कहता है।
 
 ## कॉन्फ़िगरेशन प्राथमिकता
 
@@ -131,15 +131,15 @@ journalctl --user -u argvus-taskbar.service -n 50 --no-pager
 
 ARGVUS बिल्ड दोनों, परंपरागत संख्यात्मक कार्यक्षेत्र आईडी और Hyprland 0.57 पाठ्य कार्यक्षेत्र पतों को स्वीकार करता है। `id` के बिना नामित कार्यक्षेत्र स्थिर रूप से कार्यक्षेत्र स्नैपशॉट, क्लाइंट, मॉनीटर और घटनाओं के माध्यम से प्रोसेस-स्थानीय आंतरिक पहचानकर्ताओं को प्राप्त करते हैं। ये पहचानकर्ता कभी भी Hyprland को नहीं भेजे जाते: कार्यक्षेत्र बटन असली नाम प्रेषित करते हैं।
 
- optionally names a JSON file relative to 
+ optionally names a JSON file relative to
 
-, such as 
+, such as
 
-. Each workspace name maps to an object with 
+. Each workspace name maps to an object with
 
- and 
+ and
 
- strings. Labels are escaped as Pango text and do not change matching or click targets. Missing metadata falls back to native workspace names. 
+ तार. लेबल Pango टेक्स्ट के रूप में बच जाते हैं और मिलान या क्लिक लक्ष्य नहीं बदलते हैं। गुम मेटाडेटा मूल कार्यस्थान नामों पर वापस आ जाता है।
 
  owns the derived project metadata; reopen a project after list/language changes to refresh it.
 
